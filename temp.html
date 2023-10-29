@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> <!-- bootstrao -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> <!-- script -->
+
+
+</head>
+<body style="background-image: url(https://img.freepik.com/free-photo/sky-sunset_1203-1666.jpg?size=626&ext=jpg); background-repeat: no-repeat; background-size: cover; "><br><br>
+    <div class="container">
+        <div class="row mt-5">
+
+            <div class="col-md-2"></div>
+
+            <div class="col-md-6" style="background-image: url(https://img.freepik.com/free-photo/vivid-blurred-colorful-wallpaper-background_58702-3832.jpg?w=1060&t=st=1697347087~exp=1697347687~hmac=37225e47dc9eeb2fb58bb74aec295e7305407d3404ade45945b837ee5a4954b9); background-repeat: no-repeat; background-size: cover;">
+
+                <h1 style="font-family: 'Times New Roman', Times, serif; padding: 20px;">WEATHER</h1>
+                <div class="img" style="align-items: center; justify-content: center; text-align: center; margin-top: 40px;">
+                    <img src="https://cdn-icons-png.flaticon.com/128/1163/1163661.png" alt="">
+                </div><br><br><br><br><br>
+
+                <div class="row">
+                    <div class="col-md-6" id="result" style="padding: 10px;"></div>
+                </div>
+
+            </div>
+
+            <div class="col-md-3" style="background-color: rgb(66, 123, 66); padding: 20px; ">
+
+                <input type="text" placeholder="Enter city" class="form-control" id="input" style="background-color: rgb(66, 123, 66); border-color: rgb(66, 123, 66); color: white;">
+
+                <input onclick="search()" type="button" value="Search" class="btn btn-success border border-light ms-3 mt-2">
+
+                <hr style="color: white;">
+
+                <div class="row">
+
+                    <div class="col-md-4" id="result2"></div>
+
+                </div>
+
+                <hr style="color: white;">
+
+            </div>
+
+        </div>
+    </div>
+    
+</body>
+<script>
+
+    // fetch('https://api.openweathermap.org/data/2.5/weather?q=kannur&appid=3d9b304396c7a680b032694b519a57a3').then((response)=>{
+    //     response.json()
+    //     .then((data)=>{
+    //         console.log(data);
+    //         result.innerHTML =`
+    //         <div class="card" style="width: 18rem;">
+    //         <div class="card-body">
+    //         <h5 class="card-title">${data.name}</h5>
+    //         <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+    //         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    //         </div>
+    //         </div>`
+
+    //     });}).catch((error)=>{console.log(error);})
+    
+
+    //function definition
+
+    const search =async()=>{
+        let svalue = input.value
+        console.log(svalue);
+        
+        if(svalue){
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${svalue}&appid=3d9b304396c7a680b032694b519a57a3`)
+            // response.json().then((data)=>{
+            //     console.log(data);
+            // })
+            if(response.status>=200&& response.status<=299){
+            response.json().then((data)=>{
+            //  console.log(data);
+            
+            let place=data.name
+            console.log(place);
+
+            let temp=data.main.temp
+            var ctemp=eval(temp-273.15).toFixed(1)
+            console.log(ctemp);
+
+            let feels_like=eval(data.main.feels_like-273.15).toFixed(1)
+            console.log(feels_like);
+
+            let img=data.weather[0].icon
+            console.log(img);
+
+            let pressure=data.main.pressure
+            console.log(pressure);
+
+            let des=data.weather[0].description
+            console.log(des);
+
+            let Country =data.sys.country
+            console.log(Country);
+
+            let humidity =data.main.humidity
+            console.log(humidity);
+
+            let Wind=data.wind.speed
+            console.log(Wind);
+
+            result.innerHTML =`
+    <div class="card bg-transparent border border-transparent" style="width: 100%;">
+    <div class="card-body ">
+    <h2 class="card-title">${ctemp}℃</h2>
+    <h6 class="card-subtitle mb-2  text-body-secondary">${des}</h6>
+    <h3 class="card-subtitle mb-2  mt-2 text-body-secondary">${place}</h3>
+    <h6 class="card-subtitle mb-2 text-body-secondary">Feels like ${feels_like}℃</h6>
+    <h6 class="card-subtitle mb-2  text-body-secondary"></h6>
+    <img class="cloud"  src="http://openweathermap.org/img/w/${img}.png" alt="">
+    </div>
+    </div>
+    `
+    result2.innerHTML=`
+   <div class="card bg-transparent " style="width: 12rem;">
+   <ul class="list-group list-group-flush">
+     <li class="list-group-item bg-transparent text-light">Weather Details</li>
+     <li class="list-group-item bg-transparent mt-2">Country : ${Country}</li>
+
+    <li class="list-group-item bg-transparent">Humidity : ${humidity}</li>
+
+    <li class="list-group-item bg-transparent">Wind : ${Wind}</li>
+
+    <li class="list-group-item bg-transparent">Pressure : ${pressure}</li>
+
+   </ul>
+   </div>
+    `
+                 
+
+             })
+             }
+             else{
+                document.querySelector(".error").innerHTML=`&#128542 It appears that you have entered an incorrect city name, or the name does not exist in our system. Please try again with another city name.<br> Thank you for your understanding. `
+
+             }
+
+        }
+        else{
+            alert("please enter a valid input")
+        }
+    }
+
+    
+
+</script>
+</html>
